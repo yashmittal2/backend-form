@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 const server = express();
 server.use(cors());
 server.use(bodyParser.json());
@@ -31,7 +33,11 @@ server.get("/data", async (req, res) => {
   }
 });
 
-await mongoose.connect("mongodb://localhost:27017/COVID19");
+await mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 console.log("db connected");
 
 server.listen(8080, () => {
