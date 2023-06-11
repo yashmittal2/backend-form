@@ -33,13 +33,18 @@ server.get("/data", async (req, res) => {
   }
 });
 
-await mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+(async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("db connected");
+  } catch (error) {
+    console.error("Failed to connect to the database:", error);
+  }
 
-console.log("db connected");
-
-server.listen(8080, () => {
-  console.log("server started");
-});
+  server.listen(8080, () => {
+    console.log("server started");
+  });
+})();
