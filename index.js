@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
+
 const server = express();
 server.use(cors());
 server.use(bodyParser.json());
@@ -17,16 +18,36 @@ const Covid = mongoose.model("covid", userSchema);
 
 server.post("/search", async (req, res) => {
   console.log(req.body);
-  const doc = await Covid.find({
-    continent: req.body.continent,
-    location: req.body.location,
-  });
-  res.send(doc);
+  const start = Date.now(); // Capture the start time
+
+  try {
+    const doc = await Covid.find({
+      continent: req.body.continent,
+      location: req.body.location,
+    });
+
+    const end = Date.now(); // Capture the end time
+    const duration = end - start; // Calculate the duration
+
+    const data = { duration, result: doc };
+    res.status(200).send(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 server.get("/data", async (req, res) => {
+  const start = Date.now(); // Capture the start time
+
   try {
     const allData = await Covid.find();
-    res.send(allData);
+
+    const end = Date.now(); // Capture the end time
+    const duration = end - start; // Calculate the duration
+
+    const data = { duration, result: allData };
+    res.send(data);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
