@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const server = express();
-server.use(cors());
+server.use(cors({ origin: "https://timely-tiramisu-9a5114.netlify.app" }));
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
